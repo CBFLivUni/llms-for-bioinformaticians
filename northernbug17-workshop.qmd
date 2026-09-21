@@ -318,7 +318,7 @@ One dataset shown. Across ten datasets, most cell types fully or partly matched 
 :::::::
 
 ::: cite
-Hou & Ji (2024) *[Assessing GPT-4 for cell type annotation in single-cell RNA-seq analysis](https://doi.org/10.1038/s41592-024-02235-4){target="_blank"}*. Nature Methods 21:1462-1465, Fig. 1b, 1e
+Hou & Ji (2024) *[Assessing GPT-4 for cell type annotation in single-cell RNA-seq analysis](https://doi.org/10.1038/s41592-024-02235-4){target="_blank"}*. Nature Methods 21:1462-1465, Fig. 1b, 1e (cropped), [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/){target="_blank"}
 :::
 
 ## {{< fa solid gauge-high >}} Getting an LLM to rewrite scientific software
