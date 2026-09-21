@@ -1,0 +1,27 @@
+<script>
+// Quarto skips lightbox for .r-stretch images, since wrapping them in a link
+// breaks the stretch. Open those on click instead, without wrapping.
+window.addEventListener("load", function () {
+  document.querySelectorAll(".reveal img.r-stretch").forEach(function (img) {
+    // Reveal sizes a stretched image when its slide is laid out. A large image
+    // that is still loading then gets height 0 until the next resize, so lay
+    // out again once it arrives.
+    img.addEventListener("load", function () { Reveal.layout(); });
+    img.style.cursor = "zoom-in";
+    img.addEventListener("click", function () {
+      var src = img.getAttribute("src") || img.getAttribute("data-src");
+      var box = GLightbox({
+        elements: [{ href: src, type: "image" }],
+        openEffect: "zoom",
+        closeEffect: "zoom",
+        onOpen: function () { Reveal.configure({ keyboard: false }); },
+        onClose: function () {
+          Reveal.configure({ keyboard: true });
+          setTimeout(function () { box.destroy(); }, 500);
+        }
+      });
+      box.open();
+    });
+  });
+});
+</script>

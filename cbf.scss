@@ -1,0 +1,833 @@
+/*-- scss:defaults --*/
+
+// CBF brand colours sampled from the PowerPoint template frame and logo
+$cbf-teal:      #25717D;
+$cbf-teal-dark: #1B5560;
+$cbf-teal-tint: #E8F1F2;
+$cbf-navy:      #243E7D;
+$cbf-grey:      #5A6672;
+
+// R logo blue, for the frame round the R terminal
+$r-blue:        #276DC3;
+
+$body-bg:   #FFFFFF;
+$body-color: #1F2933;
+$link-color: $cbf-teal;
+$selection-bg: rgba(37, 113, 125, 0.25);
+
+$presentation-heading-color: $cbf-navy;
+$presentation-heading-font-weight: 600;
+$presentation-h1-font-size: 1.9em;
+$presentation-h2-font-size: 1.35em;
+$presentation-font-size-root: 32px;
+
+/*-- scss:rules --*/
+
+// Template frame: the teal rule along the foot of every slide
+.reveal .slides section:not(.stack) {
+  &::after {
+    content: "";
+    position: fixed;
+    left: 4%;
+    right: 4%;
+    bottom: 2.4%;
+    height: 1px;
+    background: $cbf-teal;
+    opacity: 0.55;
+  }
+}
+
+// Title slide sits on the same teal block, so everything on it goes white
+#title-slide {
+  text-align: left;
+
+  .title, .subtitle, .quarto-title-authors, .quarto-title-author-name,
+  .date, .author, p {
+    color: #FFFFFF;
+    text-align: left;
+  }
+
+  .quarto-title-authors { justify-content: flex-start; margin-left: 0; padding-left: 0; }
+  .quarto-title-author, .quarto-title-author-name { margin-left: 0; padding-left: 0; }
+  .subtitle { opacity: 0.9; }
+}
+
+// Section dividers leave a white strip at the foot for the logo and the rule
+.reveal section:has(> h1) {
+  h1 { color: #FFFFFF; border: none; }
+  &::after { background: $cbf-teal; opacity: 0.55; }
+}
+
+// Slide titles sit on a teal accent bar
+.reveal h2 {
+  border-bottom: 3px solid $cbf-teal;
+  padding-bottom: 0.25em;
+  margin-bottom: 0.6em;
+}
+
+.reveal h2 .fa,
+.reveal h2 .fas,
+.reveal h2 .fa-solid {
+  color: $cbf-teal;
+  margin-right: 0.35em;
+}
+
+// Section dividers: full teal block
+.reveal .slides section.title-slide,
+#title-slide {
+  text-align: left;
+}
+
+
+
+// Source lines under figures
+.cite {
+  font-size: 0.4em;
+  color: #000000;
+  margin-top: 0.5em;
+  line-height: 1.35;
+  a { color: #000000; text-decoration: underline; }
+}
+
+// The one big statement per slide
+.big {
+  font-size: 1.35em;
+  line-height: 1.3;
+  color: $cbf-navy;
+}
+
+// A slide carrying a terminal gives it the room, so tighten the title block
+.reveal section:has(.term, .shared-term, .claude-cast) {
+  h2 { margin-bottom: 0.3em; padding-bottom: 0.15em; }
+  .term-hint { margin-top: 0.2em; }
+}
+
+// Live terminal embedded from ttyd, see run-demos.sh. Heights are in slide px,
+// not vh: vh follows the browser window, so on a 16:10 or full-HD screen the
+// box outgrew the scaled slide and ran off the bottom.
+.term {
+  width: 100%;
+  height: 500px;
+  border: 2px solid $cbf-teal;
+  border-radius: 4px;
+  background: #101418;
+  display: block;
+}
+
+// Window frame with a title bar, so the audience can see which language the
+// terminal is running
+.term-window {
+  border: 2px solid $r-blue;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #101418;
+
+  .term {
+    height: 500px;
+    border: none;
+    border-radius: 0;
+  }
+}
+
+.term-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  padding: 0.2em 0.6em;
+  background: $r-blue;
+  color: #FFFFFF;
+  font-size: 0.65em;
+
+  p { margin: 0; }
+  strong { color: #FFFFFF; }
+  .dot {
+    display: inline-block;
+    width: 0.6em;
+    height: 0.6em;
+    margin-right: 0.25em;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.45);
+  }
+  .fa-r-project { margin: 0 0.2em 0 0.5em; font-size: 1.3em; }
+}
+
+.term-hint {
+  font-size: 0.5em;
+  color: $cbf-grey;
+  margin-top: 0.3em;
+}
+
+// The true answer drops over the bottom of the terminal after the demo
+.reveal .term-answer {
+  position: absolute;
+  left: 12px;
+  right: 72px;
+  bottom: 150px;
+  background: #FFFFFF;
+  border: 2px solid $cbf-teal;
+  border-radius: 4px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  p { margin: 0; }
+  img { display: block; width: 100%; margin: 0; }
+}
+
+// Recorded demo in the shared deck, see demos/record-ellmer.py. The question
+// shows while the player waits at the marker after the answer without tools.
+.reveal .term-question {
+  position: absolute;
+  right: 40px;
+  bottom: 170px;
+  padding: 0.3em 0.8em;
+  background: #FFFFFF;
+  border: 2px solid $cbf-teal;
+  border-radius: 4px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  color: $cbf-teal-dark;
+  font-size: 1.2em;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+
+  &.shown { opacity: 1; }
+  small { display: block; font-size: 0.45em; font-weight: 400; color: $cbf-grey; }
+}
+
+// The same box used to say what the demo is, while the first answer runs. It
+// sits on the left so it never lands on top of the question box
+.reveal .term-question.term-intro {
+  right: auto;
+  left: 20px;
+  max-width: 560px;
+  font-size: 0.85em;
+  font-weight: 500;
+
+  small { font-size: 0.75em; }
+}
+
+// Recorded Claude Code demo in the shared deck, the same size as the live
+// terminal on those slides
+.reveal .claude-cast {
+  width: 100%;
+  height: 620px;
+  background: #101418;
+  border: 2px solid $cbf-teal;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+// The agent's figure, dropped over the right of the recording
+.reveal .cast-figure {
+  position: absolute;
+  right: 30px;
+  bottom: 40px;
+  width: 520px;
+  background: #FFFFFF;
+  border: 2px solid $cbf-teal;
+  border-radius: 4px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  p { margin: 0; }
+  img { display: block; width: 100%; margin: 0; }
+}
+
+// Logo row of agent harnesses on the "What is an agent?" slide
+.reveal .harnesses {
+  display: flex;
+  justify-content: center;
+  gap: 2.5em;
+  margin-top: 0.5em;
+  font-size: 0.68em;
+  color: $cbf-navy;
+
+  .harness-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3em;
+  }
+  .harness-items { display: flex; gap: 1.2em; }
+  .harness {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 6.5em;
+  }
+  .harness img {
+    height: 2.4em;
+    margin: 0 0 0.3em;
+  }
+  .harness-label {
+    border-top: 2px solid $cbf-teal;
+    padding-top: 0.2em;
+    width: 100%;
+    text-align: center;
+    color: $cbf-grey;
+    font-size: 0.9em;
+  }
+}
+
+// Replaces runs of separated keywords, which read badly as raw text
+.chips {
+  margin: 0.6em 0;
+}
+
+.chips p {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  margin: 0;
+  padding: 0;
+}
+
+.chips span {
+  display: inline-block;
+  background: $cbf-teal-tint;
+  color: $cbf-teal-dark;
+  border: 1px solid rgba(37, 113, 125, 0.3);
+  border-radius: 2em;
+  padding: 0.18em 0.7em;
+  font-size: 0.72em;
+  line-height: 1.5;
+}
+
+// Tinted panel for a short table or a contrast pair
+.panel {
+  background: $cbf-teal-tint;
+  border-left: 5px solid $cbf-teal;
+  padding: 0.7em 0.9em;
+  border-radius: 3px;
+}
+
+// Tables fill the slide width, since most table slides carry little else
+.reveal table {
+  font-size: 0.88em;
+  width: 100%;
+  margin-bottom: 0.9em;
+  th {
+    background: $cbf-teal;
+    color: #FFFFFF;
+    border-bottom: none;
+  }
+  th, td { padding: 0.28em 0.65em; }
+  tbody tr:nth-child(odd) { background: rgba(37, 113, 125, 0.06); }
+}
+
+// Rows revealed one click at a time. Hidden rows keep their space, so the
+// table doesn't jump as it builds
+.reveal table.row-fragments {
+  tbody tr.fragment { transition: opacity 0.25s ease; }
+  tbody tr.fragment:not(.visible) { opacity: 0; visibility: hidden; }
+}
+
+// Per-slide overrides: a wordy table needs a smaller font to leave room for
+// the takeaway, a short one can be read from the back of the room
+.reveal section.table-compact table { font-size: 0.78em; }
+
+.reveal section.table-roomy table {
+  font-size: 1em;
+  th, td { padding: 0.45em 0.7em; }
+}
+
+// A table inside a panel shares the slide with a figure, so keep it compact
+.reveal .panel table {
+  font-size: 0.8em;
+  width: auto;
+  margin-bottom: 0;
+  th, td { padding: 0.25em 0.55em; }
+}
+
+.reveal ul li::marker { color: $cbf-teal; }
+
+.reveal blockquote {
+  border-left: 5px solid $cbf-teal;
+  background: $cbf-teal-tint;
+  padding: 0.6em 0.9em;
+  font-style: normal;
+  box-shadow: none;
+}
+
+.reveal .compact-quote blockquote { font-size: 0.62em; padding: 0.25em 0.7em; margin: 0.2em 0; width: auto; }
+
+// Figures: never let one push the source line off the slide
+.reveal section img {
+  background: #FFFFFF;
+  border: none;
+  box-shadow: none;
+  max-width: 100%;
+  max-height: 66vh;
+  height: auto;
+  object-fit: contain;
+}
+
+// In a two-column layout the column width is the binding constraint
+.reveal .columns img {
+  max-width: 100%;
+  max-height: 56vh;
+  width: auto;
+}
+
+.reveal .r-stretch { object-fit: contain; }
+
+// GLightbox caps the opened image at a 900px inline max-width and otherwise
+// shows it at its natural size, so a wide screenshot opens barely larger than
+// it was on the slide. Scale it to the window instead. The shadow has to go
+// with it, since object-fit leaves the box wider than the picture.
+// Quarto's white on this box becomes a border around the picture, since
+// object-fit leaves the box wider than the image. Keep it: the Ebola figure
+// has a transparent background and would be unreadable on the dark overlay.
+.glightbox-container .gslide-media {
+  width: auto;
+  max-width: 96vw !important;
+  box-shadow: none !important;
+}
+
+.glightbox-container .gslide-image img {
+  width: 96vw;
+  height: 92vh;
+  max-width: 96vw !important;
+  max-height: 92vh !important;
+  object-fit: contain;
+}
+
+.reveal .slide-logo {
+  height: 80.92px !important;
+  width: 200px !important;
+  max-width: unset !important;
+  max-height: unset !important;
+}
+
+// Slido join code on every slide, bottom left, clear of the menu button.
+// Quarto's footer.css loads after the theme, so these need the extra class.
+.reveal .footer.footer-default {
+  left: 60px;
+  width: auto;
+  text-align: left;
+  font-size: 30px;
+  color: $cbf-teal-dark;
+}
+// Section and title slides are dark at the top but the footer sits on the
+// white strip, so keep the text dark there too
+.reveal .footer.footer-default.has-dark-background { color: $cbf-teal-dark; }
+
+.reveal .slide-number {
+  color: $cbf-teal;
+  background: transparent;
+  font-size: 0.5em;
+}
+
+.reveal code { color: $cbf-teal-dark; }
+
+.reveal pre.sourceCode {
+  border-left: 4px solid $cbf-teal;
+  border-radius: 0;
+}
+
+// Flow diagrams built from boxes rather than SVG, so they inherit the theme
+// fonts and cannot misalign the way inline SVG text does
+.flow, .flow p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45em;
+  margin: 0.4em 0;
+  padding: 0;
+}
+
+.flow span {
+  display: inline-block;
+  background: $cbf-teal-tint;
+  color: $cbf-teal-dark;
+  border: 2px solid rgba(37, 113, 125, 0.45);
+  border-radius: 5px;
+  padding: 0.28em 0.8em;
+  font-size: 0.72em;
+  line-height: 1.4;
+}
+
+.flow span.solid {
+  background: $cbf-navy;
+  color: #FFFFFF;
+  border-color: $cbf-navy;
+}
+
+.flow span.arrow {
+  background: none;
+  border: none;
+  color: $cbf-teal;
+  padding: 0 0.05em;
+}
+
+// Stacked flow rows, where the default margins push the diagram off the slide
+.flow.tight, .flow.tight p {
+  margin: 0.05em 0;
+}
+
+.flow.large, .flow.large p {
+  gap: 0.45em;
+  margin: 1em 0;
+}
+
+.flow.large span {
+  font-size: 0.82em;
+  padding: 0.4em 0.75em;
+}
+
+.flow.large span.arrow {
+  padding: 0 0.05em;
+}
+
+.flow.large span.plain {
+  font-size: 0.72em;
+}
+
+// Worked example under the How it works flow: one grid so each example
+// stays under its step
+.reveal .gen-flow {
+  display: grid;
+  grid-template-columns: 15% 3% 25% 3% 13% 3% 20% 3% 15%;
+  align-items: start;
+  row-gap: 0.6em;
+  margin: 1.1em 0 0.3em;
+  font-size: 0.85em;
+}
+.reveal .gen-flow .gf-head { text-align: center; color: $cbf-teal-dark; align-self: center; }
+.reveal .gen-flow .gf-arrow { text-align: center; color: $cbf-teal; align-self: center; }
+.reveal .gen-flow .gf-model {
+  display: inline-block; white-space: nowrap; background: $cbf-navy; color: #FFFFFF;
+  border-radius: 5px; padding: 0.3em 0.7em;
+}
+.reveal .gen-flow .gf-ex { font-size: 0.8em; text-align: center; color: $cbf-grey; line-height: 1.35; }
+.reveal .gen-flow .gf-tok {
+  display: inline-block; font-family: monospace; font-size: 0.9em;
+  background: $cbf-teal-tint; color: $cbf-teal-dark;
+  border: 2px solid rgba(37, 113, 125, 0.45); border-radius: 4px;
+  padding: 0.05em 0.35em; margin: 0.12em;
+}
+.reveal .gen-flow .gf-tok.picked { background: $cbf-navy; border-color: $cbf-navy; color: #FFFFFF; }
+.reveal .gen-flow .gf-odds {
+  display: grid; grid-template-columns: 3.6em 1fr 2.6em; align-items: center;
+  gap: 0.3em; font-family: monospace; font-size: 0.9em; text-align: left;
+}
+.reveal .gen-flow .gf-odds b { display: block; height: 0.7em; background: rgba(37, 113, 125, 0.45); border-radius: 2px; }
+.reveal .gen-flow .gf-odds em { font-style: normal; text-align: right; }
+.reveal .gen-flow .gf-odds.picked { color: $cbf-navy; font-weight: 700; }
+.reveal .gen-flow .gf-odds.picked b { background: $cbf-navy; }
+.reveal .gen-flow .gf-note { font-size: 0.8em; margin-top: 0.3em; }
+.reveal .gf-repeat { text-align: center; color: $cbf-grey; font-size: 0.7em; margin: 0.9em 0 1.1em; }
+
+.flow span.plain {
+  background: none;
+  border: none;
+  color: $cbf-grey;
+  font-size: 0.58em;
+}
+
+// Cropped screenshot of a real Hugging Face model card, in a browser frame.
+// Classes rather than inline styles, since a style attribute on a column
+// replaces the width Quarto sets there.
+.reveal .hf-card-intro { font-size: 0.85em; }
+.reveal .hf-card-col { position: relative; }
+
+.hf-card {
+  border: 1px solid #C9D2D8;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.hf-card-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  background: #EEF1F3;
+  border-bottom: 1px solid #C9D2D8;
+  font-size: 13px;
+  color: $cbf-grey;
+
+  span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #C9D2D8;
+  }
+  span:last-of-type { margin-right: 8px; }
+}
+
+.hf-card-page {
+  position: relative;
+  background: #FFFFFF;
+}
+
+.reveal .hf-card-page img {
+  display: block;
+  width: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+}
+
+// Highlighter over the key sentence. Positions are percentages of the image,
+// measured from the live page, so they hold at any column width.
+.hf-card-mark {
+  position: absolute;
+  background: rgba(255, 205, 0, 0.45);
+  mix-blend-mode: multiply;
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+
+.hf-mark-1 { left: 28.64%; top: 72.57%; width: 67.47%; height: 5.81%; }
+.hf-mark-2 { left: 2.22%;  top: 81.11%; width: 89.41%; height: 5.81%; }
+.hf-mark-3 { left: 2.22%;  top: 89.65%; width: 67.75%; height: 5.81%; }
+
+@keyframes hf-sweep { to { transform: scaleX(1); } }
+
+// Runs each time the slide is entered, since reveal toggles .present
+.reveal section.present {
+  .hf-mark-1 { animation: hf-sweep 0.9s ease-in-out 1s forwards; }
+  .hf-mark-2 { animation: hf-sweep 1.1s ease-in-out 1.9s forwards; }
+  .hf-mark-3 { animation: hf-sweep 0.9s ease-in-out 3s forwards; }
+}
+
+// Print has no .present, so show the highlight outright
+html.print-pdf .hf-card-mark { transform: scaleX(1); }
+
+// Summary drops over the bottom of the screenshot, so the hidden fragment
+// takes no room from the slide
+.reveal .hf-card-summary {
+  position: absolute;
+  left: 36px;
+  right: 36px;
+  bottom: 18px;
+  font-size: 0.62em;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+// Wrapped numbered code: hang continuation lines past the line-number gutter
+.reveal pre.code-overflow-wrap code { white-space: pre-wrap; }
+.reveal pre.code-overflow-wrap.numberSource code > span {
+  display: inline-block;
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: calc(4em + 8px);
+  text-indent: calc(-4em - 8px);
+}
+
+// Cell type agreement table: the partial matches are the point, so tint those
+// rows rather than leaving them to the zebra striping
+.reveal .agreement table {
+  font-size: 0.6em;
+  margin-bottom: 0.5em;
+  th, td { padding: 0.22em 0.5em; }
+}
+
+.reveal .agreement table tbody tr:has(.partial) {
+  background: rgba(209, 73, 91, 0.16);
+  td:last-child { color: #A8323F; font-weight: 600; }
+}
+
+// Skill snippet: plain text, with the trigger phrases and rules lighting up in
+// bold as fragments. Monospace bold keeps the same width, so nothing reflows.
+.reveal pre.skill-head {
+  border-left: 4px solid $cbf-teal;
+  box-shadow: none;
+  width: 100%;
+  margin: 0.3em 0;
+  font-size: 0.5em;
+  line-height: 1.45;
+
+  code {
+    white-space: pre-wrap;
+    max-height: none;
+    padding: 0.6em 0.9em;
+    color: $cbf-grey;
+    background: #F7F9FA;
+  }
+}
+
+.reveal .skill-cut { color: #A9B3BB; }
+
+// Intro line, snippet and quote share one slide, so everything steps down a size
+.reveal section.skill-slide {
+  > p { font-size: 0.8em; margin: 0.2em 0; }
+  pre.skill-head { font-size: 0.44em; }
+  blockquote { font-size: 0.8em; margin: 0.3em 0 0; padding-top: 0.2em; padding-bottom: 0.2em; }
+}
+
+.reveal pre.skill-head .fragment.skill-key {
+  opacity: 1;
+  visibility: inherit;
+  font-weight: 400;
+  border-radius: 2px;
+}
+
+// Once a group is lit, the rest of the text steps back
+.reveal pre.skill-head:has(.skill-key.visible) code { color: #9AA4AC; }
+
+.reveal pre.skill-head .fragment.skill-key.visible { font-weight: 700; }
+.reveal pre.skill-head .fragment.skill-key.trigger.visible {
+  color: $cbf-teal-dark;
+  background: rgba(37, 113, 125, 0.12);
+}
+.reveal pre.skill-head .fragment.skill-key.rule.visible {
+  color: #A8323F;
+  background: rgba(209, 73, 91, 0.12);
+}
+
+.reveal .skill-legend.trigger { color: $cbf-teal-dark; font-weight: 700; }
+.reveal .skill-legend.rule { color: #A8323F; font-weight: 700; }
+
+// Contents slide: three equal panels, sized so section names mostly fit a line
+.reveal .columns.contents {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  font-size: 0.85em;
+  margin-bottom: 0.9em;
+
+  .column { display: flex; }
+  .panel { flex: 1; }
+  ol { margin-left: 1.2em; }
+}
+
+// Own-work slide: four views stacked in one place, swapped by fragments
+.reveal .own-steps { width: 100%; }
+.reveal .r-stack > .own-step { width: 100%; font-size: 0.8em; margin: 0 auto auto; }
+.reveal .own-step .flow { margin: 0.4em 0 0.7em; }
+.reveal .own-step .columns img { max-height: 58vh; }
+
+// Sample table copied from a GEO series record
+.geo-record {
+  border: 1px solid #C9D2D8;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+.reveal .geo-record p { margin: 0; }
+
+.reveal .geo-head {
+  display: block;
+  padding: 8px 12px;
+  background: #EEF1F3;
+  border-bottom: 1px solid #C9D2D8;
+  font-size: 0.7em;
+}
+
+.reveal .geo-record table {
+  font-size: 0.62em;
+  margin: 0;
+}
+
+.reveal .geo-flag {
+  background: rgba(255, 205, 0, 0.55);
+  padding: 0 3px;
+  border-radius: 2px;
+}
+
+// Panel speakers: four headshots in a row with name and role underneath
+.reveal .panellists {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2em;
+  margin-top: 0.8em;
+}
+
+.reveal .panellists img {
+  width: 100%;
+  max-height: none;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.reveal .panellists p {
+  margin: 0.4em 0 0;
+  font-size: 0.62em;
+  line-height: 1.3;
+  color: $cbf-grey;
+}
+
+.reveal .panellists strong {
+  display: block;
+  font-size: 1.15em;
+  color: $cbf-teal-dark;
+}
+
+// Slido embed. data-src rather than src so reveal only loads it when the
+// slide comes near, not all three at once when the deck opens
+.slido {
+  width: 100%;
+  height: 520px;
+  border: 2px solid $cbf-teal;
+  border-radius: 4px;
+  display: block;
+}
+
+.slido-short { height: 360px; }
+.slido-tall { height: 570px; }
+
+// Join details under the panellists, so the room can send in questions
+.reveal .slido-join {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8em;
+  margin-top: 0.3em;
+
+  p { margin: 0; font-size: 0.9em; color: $cbf-teal-dark; }
+  img { width: 130px; height: 130px; margin: 0; }
+}
+
+// perturbMatch figure drops over the test-set plot on the own-work slide
+.reveal .own-step .pm-results { position: relative; }
+.reveal .own-step .pm-package {
+  position: absolute;
+  top: -16px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  p { margin: 0; }
+  // Slide px, not vh, or the card grows past the footer on a 16:10 screen
+  img {
+    max-height: 380px;
+    background: #FFFFFF;
+    border: 2px solid $cbf-teal;
+    border-radius: 4px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  }
+}
+
+// Placeholder for the one live terminal shared by several slides, see
+// term-shared.html. The iframe is laid over this box, so it sets the size.
+// Taller than the R-console terminal: a figure shown with `show` is scaled to
+// the window height, so every px here is a px of figure.
+.reveal .shared-term {
+  width: 100%;
+  height: 620px;
+}
+
+// A box that tall would run under the logo and the footer, and the iframe sits
+// above both. The demo slides are all terminal, so drop the furniture there
+// instead. term-shared.html puts the class on while such a slide is showing.
+.reveal.term-slide .slide-logo {
+  display: none;
+}
+
+// !important because quarto's own script sets the footer's display inline
+.reveal.term-slide .footer {
+  display: none !important;
+}
+
+.reveal .shared-term-frame {
+  position: absolute;
+  margin: 0;
+  box-sizing: border-box;
+  transform-origin: 0 0;
+  visibility: hidden;
+  z-index: 20;
+}
