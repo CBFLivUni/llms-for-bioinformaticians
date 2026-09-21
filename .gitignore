@@ -1,7 +1,6 @@
 # Quarto render output
 /.quarto/
 *_files/
-/northernbug17-workshop.html
 /_site/
 Rplots.pdf
 .Rhistory

@@ -6,8 +6,11 @@ they are useful for, how to work with them and where they can fail*. Jamie Soul
 [NorthernBUG 17](https://northernbug.github.io/northernbug17) in Liverpool on
 18 September 2026, ahead of a panel discussion on the same topic.
 
-- `northernbug17-workshop.qmd` is the slide deck, a Quarto revealjs
-  presentation. Build it with `quarto render northernbug17-workshop.qmd`.
+- `northernbug17-workshop.html` is the rendered slide deck. It is a single
+  self-contained file, so you can download it and open it in a browser with no
+  internet connection.
+- `northernbug17-workshop.qmd` is the Quarto source for the deck. Rebuild the
+  HTML with `quarto render northernbug17-workshop.qmd`.
 - `local-llm-demo.R` is the local LLM demo from the talk, written up below.
 
 Figures taken from papers and blog posts belong to their authors, and each

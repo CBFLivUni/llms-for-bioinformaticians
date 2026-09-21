@@ -16,6 +16,7 @@ format:
     code-copy: true
     code-overflow: scroll
     lightbox: true
+    embed-resources: true
     include-after-body: [lightbox-stretch.html]
     width: 1280
     height: 720
