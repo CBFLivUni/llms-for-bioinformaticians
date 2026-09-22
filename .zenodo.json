@@ -1,0 +1,35 @@
+{
+  "title": "LLMs for bioinformaticians: what they are useful for, how to work with them and where they can fail",
+  "upload_type": "presentation",
+  "description": "<p>Slides and a runnable local LLM demo from the workshop <em>LLMs for bioinformaticians</em>, presented at NorthernBUG 17 in Liverpool on 18 September 2026, ahead of a panel discussion on the same topic.</p><p>The deck covers what an LLM is, uses in bioinformatics, prompting, choosing a model, agentic AI and how it goes wrong. The demo uses ellmer and Ollama to ask a small local model the same question with and without a tool.</p><p>Slides: <a href=\"https://cbflivuni.github.io/llms-for-bioinformaticians/\">cbflivuni.github.io/llms-for-bioinformaticians</a></p><p>Third-party figures remain under their original licences, as credited on each slide.</p>",
+  "creators": [
+    {
+      "name": "Soul, Jamie",
+      "affiliation": "Computational Biology Facility, University of Liverpool",
+      "orcid": "0000-0003-2255-6459"
+    }
+  ],
+  "license": "cc-by-4.0",
+  "publication_date": "2026-09-18",
+  "keywords": [
+    "large language models",
+    "bioinformatics",
+    "AI agents",
+    "prompting",
+    "ellmer",
+    "Ollama",
+    "NorthernBUG"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://cbflivuni.github.io/llms-for-bioinformaticians/",
+      "relation": "isSupplementedBy",
+      "resource_type": "presentation"
+    },
+    {
+      "identifier": "https://northernbug.github.io/northernbug17",
+      "relation": "isPartOf",
+      "resource_type": "other"
+    }
+  ]
+}

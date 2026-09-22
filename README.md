@@ -155,3 +155,10 @@ built on, and its `llama-server` speaks the OpenAI API. You get more control
 over quantisation and GPU offload, and in exchange you pick your own GGUF
 files. From R you would point `chat_openai()` at it rather than using
 `chat_ollama()`.
+
+## Licence
+
+The slides, text and code are released under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), see `LICENSE`.
+Third-party figures remain under their original licences, as credited on each
+slide.
