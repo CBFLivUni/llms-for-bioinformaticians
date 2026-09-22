@@ -1,26 +1,20 @@
 # LLMs for bioinformaticians
 
 Slides and a runnable demo from the workshop *LLMs for bioinformaticians: what
-they are useful for, how to work with them and where they can fail*. Jamie Soul
-(Computational Biology Facility, University of Liverpool) gave it at
+they are useful for, how to work with them and where they can fail*. Presented at
 [NorthernBUG 17](https://northernbug.github.io/northernbug17) in Liverpool on
 18 September 2026, ahead of a panel discussion on the same topic.
 
 - `northernbug17-workshop.html` is the rendered slide deck. It is a single
-  self-contained file, so you can download it and open it in a browser with no
-  internet connection.
+  self-contained file. Can download and open it in a browser.
 - `northernbug17-workshop.qmd` is the Quarto source for the deck. Rebuild the
   HTML with `quarto render northernbug17-workshop.qmd`.
-- `local-llm-demo.R` is the local LLM demo from the talk, written up below.
-
-Figures taken from papers and blog posts belong to their authors, and each
-slide carries its citation.
+- `local-llm-demo.R` is the local LLM demo from the talk, described below.
 
 ## Running a local LLM from R: Ollama + ellmer
 
-A self-contained demo from the workshop. It asks a 0.6B-parameter model the
-same question twice, first on its own and then with an R function it can call. The model runs on the
-CPU of your own machine, so you need no API key and nothing leaves the laptop.
+A self-contained demo presented at the workshop. The aim is to demonstrate the change in model behaviour with and without tool use. It asks a 0.6B-parameter model the
+same question twice, first on its own (own memory) and then with an R function it can call (tool use). The model runs on CPU (a bit slowly), so no API key needed.
 
 [Ollama](https://ollama.com) runs the model.
 [ellmer](https://ellmer.tidyverse.org) drives it from R.
@@ -44,14 +38,9 @@ ollama pull qwen3:0.6b
 ```
 
 That tag is the 4-bit build, Q4_K_M. `ollama show qwen3:0.6b` prints the
-quantisation, the context length and whether the model can call tools, and the
+quantisation, the context length and whether the model can call tools. The
 model's page on [the library](https://ollama.com/library) lists the other
-quantisations it comes in. Heavier ones are more faithful to the original
-weights and slower to run.
-
-Anything Ollama can run will do. Bigger models answer better and need more
-memory: allow RAM roughly equal to the download size, plus some headroom.
-`qwen3:4b` is a reasonable step up.
+quantisations it comes in.
 
 Then ellmer, in R:
 
@@ -59,7 +48,7 @@ Then ellmer, in R:
 install.packages("ellmer")
 ```
 
-Checked against R 4.5.2, ellmer 0.4.1 and Ollama 0.30.7.
+Ran on R 4.5.2, ellmer 0.4.1 and Ollama 0.30.7.
 
 ### The script
 
@@ -68,7 +57,7 @@ paste it into an R console.
 
 ```r
 # A local LLM answering the same question twice: from memory, then from a tool.
-# Needs Ollama running with qwen3:0.6b pulled. Nothing leaves the machine.
+# Needs Ollama running with qwen3:0.6b pulled.
 
 library(ellmer)
 
@@ -105,8 +94,6 @@ ask_with_tools <- function(question) {
     arguments = list(symbol = type_string("A HGNC gene symbol, e.g. SOX9"))
   ))
 
-  # print the request as it comes in, so the model asking and R answering are
-  # two visible steps rather than one answer
   chat$on_tool_request(function(request) {
     cat("  -> R is being asked to run:", request@name,
         "(", unlist(request@arguments), ")\n")
@@ -144,8 +131,7 @@ COL2A1 has 54 exons.
 The right answer is 54. Without the tool the model states a wrong number with
 no hedging, and gives a different one each time you run it, because all it can
 do is predict plausible text. With the tool, the number comes from the data
-frame and the model only has to decide to ask for it. A 0.6B model on a CPU
-manages that, so you can try tool calling without a frontier model.
+frame and the model only has to decide to ask for it.
 
 ### Things to try
 
@@ -159,28 +145,6 @@ Or `chat_openai()`, `chat_google_gemini()`, and so on.
 
 Give it a live lookup. Replace `lookup_gene()` with a query against biomaRt or
 an AnnotationHub object, so the answers come from Ensembl.
-
-Set a system prompt with `chat_ollama(system_prompt = "...")` and see how far
-the answer moves.
-
-Turn thinking off if a model stalls. Qwen3 is a reasoning model, and on the
-command line it will think for minutes before answering, so `ollama run` needs
-the flag:
-
-```bash
-ollama run qwen3:0.6b --think=false "How many exons does COL2A1 have?"
-```
-
-The R script above does not need it. `chat_ollama()` talks to
-`http://localhost:11434/v1`, Ollama's OpenAI-compatible endpoint, where
-thinking is off already. That endpoint also ignores `think` and `keep_alive` if
-you pass them through `api_args`.
-
-Keep the model in memory between runs, otherwise each call reloads it:
-
-```bash
-ollama run qwen3:0.6b --keepalive -1s ""
-```
 
 ### An alternative to Ollama
 

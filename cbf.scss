@@ -203,6 +203,19 @@ $presentation-font-size-root: 32px;
   font-weight: 500;
 
   small { font-size: 0.75em; }
+  &.shown { pointer-events: auto; }
+}
+
+.reveal .term-close {
+  float: right;
+  margin: -0.2em -0.4em 0 0.6em;
+  padding: 0 0.2em;
+  color: $cbf-grey;
+  font-size: 1.3em;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover { color: $cbf-teal-dark; }
 }
 
 // Recorded Claude Code demo in the shared deck, the same size as the live

@@ -172,6 +172,8 @@ Tools have made LLMs much more useful in bioinformatics.
 ::::
 
 ::: {#ellmer-intro .term-question .term-intro}
+[×]{.term-close title="Close"}
+
 The same question, asked with and without a tool.
 
 <small>An R function sends the prompt to a model running locally on this laptop.</small>
@@ -216,13 +218,20 @@ window.addEventListener("load", function () {
         pauseOnMarkers: true,
         controls: true
       });
+      // The intro only belongs to the first run, so the run with the tool
+      // keeps the terminal clear
+      var asked = false;
       player.addEventListener("marker", function () {
+        asked = true;
         question.classList.add("shown");
         intro.classList.remove("shown");
       });
       player.addEventListener("play", function () {
         question.classList.remove("shown");
-        intro.classList.add("shown");
+        if (!asked) intro.classList.add("shown");
+      });
+      intro.querySelector(".term-close").addEventListener("click", function () {
+        intro.classList.remove("shown");
       });
     }
     player.play();
