@@ -1,13 +1,13 @@
 # LLMs for bioinformaticians
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22893412.svg)](https://doi.org/10.5281/zenodo.22893412)
+
 Slides and a runnable demo from the workshop *LLMs for bioinformaticians: what
 they are useful for, how to work with them and where they can fail*. Presented at
 [NorthernBUG 17](https://northernbug.github.io/northernbug17) in Liverpool on
 18 September 2026, ahead of a panel discussion on the same topic.
 
 **View the slides:** <https://cbflivuni.github.io/llms-for-bioinformaticians/>
-
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22893412.svg)](https://doi.org/10.5281/zenodo.22893412)
 
 - `northernbug17-workshop.html` is the rendered slide deck, the same file as the
   link above. It is self-contained, so it also works offline once downloaded.
